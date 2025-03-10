@@ -12,14 +12,14 @@ class PDistWord2TestCase(TestCase):
 
         # Defining the probability P(w) for a 2 words in corpus based on its occurrence.
         cls.p = ProbaDistributor(util.datafile('../data/count_2w.tsv'))
-        print(f'[Setup]Total words in corpus\t:{cls.p.denominator:,}.\r\n')
+        print(f'[Setup]Total words in corpus: {cls.p.denominator:,}.\r\n')
 
     def test_double_word1(self):
         # P(3rd floor) = 272,543 / 225,955,251,755 = 1.20618 x 10^-06
         w = '3rd floor'
         w_cnt = self.p[w]
         proba = self.p(w)
-        print(f'P({w}) = {self.p[w]} / {self.p.denominator} = {proba}.\r\n')
+        print(f'P({w}) = {self.p[w]:,} / {self.p.denominator:,} = {proba}.\r\n')
         self.assertEqual(w_cnt / self.p.denominator, proba)
 
     def test_double_word2(self):
@@ -27,7 +27,7 @@ class PDistWord2TestCase(TestCase):
         w = '2nd year'
         w_cnt = self.p[w]
         proba = self.p(w)
-        print(f'P({w}) = {w_cnt} / {self.p.denominator} = {proba}.\r\n')
+        print(f'P({w}) = {self.p[w]:,} / {self.p.denominator:,} = {proba}.\r\n')
         self.assertEqual(w_cnt / self.p.denominator, proba)
 
     def test_relative_proba(self):
@@ -41,14 +41,14 @@ class PDistWord2TestCase(TestCase):
         # P(dooohhh good) =  1 / 225,955,251,755 = 4.42565 x 10^-12
         w = 'dooohhh good'
         proba = self.p(w)
-        print(f'P({w}) = 1 / {self.p.denominator} = {proba}.\r\n')
+        print(f'P({w}) = 1 / {self.p.denominator:,} = {proba}.\r\n')
         self.assertEqual(1 / self.p.denominator, proba)
 
     def test_unknown2(self):
         # P(korenge) =  1 / 225,955,251,755 = 4.42565 x 10^-12
         w = 'korenge'
         proba = self.p(w)
-        print(f'P({w}) = 1 / {self.p.denominator} = {proba}.\r\n')
+        print(f'P({w}) = 1 / {self.p.denominator:,} = {proba}.\r\n')
         self.assertEqual(1 / self.p.denominator, proba)
 
     def test_relative_proba_for_unknown(self):
