@@ -1,48 +1,46 @@
 from unittest import TestCase
-import utility as util
+import utility
 from proba_distributor import ProbaDistributor
 
 
 class Test(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         # 1 edit vocab size
-        self.denominator = 39073
-
+        cls.denominator = 39073
         # Peter Norvig assumes that spelling error occurs every 20 words (pg. 235).
-        self.spell_error = 1. / 20.
+        cls.spell_error = 1. / 20.
 
-        # Defining the probability P(w) for a word in corpus based on its occurrence.
-        self.p = ProbaDistributor(util.datafile('../data/count_1edit.tsv'))
-        print(f'Total words in corpus\t:{self.p.denominator:,}.\r\n')
-
-        self.assertEqual(self.denominator, self.p.denominator)
+        # Defining the probability P(w) for a 2 words in corpus based on its occurrence.
+        cls.p = ProbaDistributor(utility.datafile('../data/count_1edit.tsv'))
+        print(f'[Setup]Total words in corpus: {cls.p.denominator:,}.\r\n')
 
     def test_product(self):
-        prod = util.product([1, 2, 3])
+        nums = [1, 2, 3]
+        prod = utility.product(nums)
+        print(f'Product of {nums} = {prod:,}')
         self.assertEqual(1 * 2 * 3, prod)
 
     def test_pedit_unknown(self):
-        # An unknown word.
+        # The word not found in corpus => P(oraneg) = 1 / 39073 = 2.55931 x 10^-05
         w = 'oraneg'
-
-        # P(oraneg) = 1 / 39073 = 2.55931 x 10^-05
         p_w = self.p(w)
 
-        # Manual calculation
+        # Manual calculation to verify the pedit outcome.
         manual_prod = self.spell_error * p_w
-        print(f'Manual product is {manual_prod:.8f}')
+        print(f'Manual: {self.spell_error} x {p_w} = {manual_prod:.8f}')
 
-        calculated_prod = util.pedit(w, self.p, self.spell_error)
-        print(f'Manual product is {calculated_prod:.8f}')
+        pedit_prod = utility.pedit(w, self.p, self.spell_error)
+        print(f'Pedit : {self.spell_error} x {p_w} = {pedit_prod:.8f}')
 
-        condition = manual_prod == calculated_prod
+        condition = manual_prod == pedit_prod
+        print(f'manual = pedit: {condition}.\r\n')
         self.assertTrue(condition)
 
-    def test_pedit_relative(self):
-        # An unknown word.
-        a = 'oraneg'
-        b = 'orange'
-
-        # 1 / 39073 = 2.55931 x 10^-05 = 1 / 39073 = 2.55931 x 10^-05
-        condition = self.p(a) == self.p(b)
-        self.assertTrue(condition)
+    def test_pedit_edit1(self):
+        # The word found in corpus => 133 / 39,073 x 0.05 (spelling error) = 0.00017019425178512016
+        w = 'i|is'
+        w_cnt = self.p[w]
+        proba = utility.pedit(w, self.p, self.spell_error)
+        print(f'P({w}) = {self.p[w]:,} / {self.p.denominator:,} = {proba}.\r\n')
+        self.assertEqual(w_cnt / self.p.denominator * self.spell_error, proba)
