@@ -7,7 +7,6 @@ from proba_distributor import ProbaDistributor
 def datafile(name, sep='\t'):
     """Reads key,value pairs from file."""
     with open(name, 'r') as file:
-        # file = open(name)
         for line in file:
             yield line.split(sep)
 
@@ -18,7 +17,6 @@ def product(nums):
 
 
 def pedit(edit, p: ProbaDistributor, spell_error: float):
-    # TODO: According pg 234, this is the noisy model P(w|c). Need to verify.
     """The probability of an edit; can be '' or 'a|b' or 'a|b+c|d'."""
     if edit == '':
         return 1. - spell_error
@@ -39,6 +37,7 @@ class ChannelV1:
         self.trace = {}
 
     def calculate_noise(self, edit):
+        # TODO: According pg 234, this is the noisy model P(w|c). Need to verify.
         return pedit(edit, self.pd_error_model, self.spell_error)
 
     def calculate_lang_and_error(self, p):
@@ -73,18 +72,6 @@ class ChannelV1:
 
         # A substitution for Norvig's lambda for tracing.
         c, edit = max(candidates, key=self.calculate_lang_and_error)
-
-        # Reads the max-args produced by calculate_proba.
-        max_proba = max(self.trace.values())
-
-        # Trace the max-args key from the trace.
-        for k, v in self.trace.items():
-            if v == max_proba:
-                print(f'MAXARGS({k} -> {v})')
-            else:
-                print(f'{k} -> {v}')
-
-        # for a in candidates: print(f'{a[0]}:{a[1]}')
 
         return c
 
