@@ -42,6 +42,8 @@ class ProbaDistributor(dict):
 
     def __call__(self, key):
         if key in self:
+            # print(f'P({key}) / {self.denominator}) \t= {float(self[key] / self.denominator)}')
             return self[key] / self.denominator
         else:
+            # print(f'P(1 / {self.denominator}) = {1 / self.denominator}')
             return self.missing_handler(key, self.denominator)

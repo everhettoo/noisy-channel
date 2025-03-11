@@ -19,7 +19,10 @@ def product(nums):
 
 
 def pedit(edit, p: ProbaDistributor, spell_error: float):
+    # TODO: According pg 234, this is the noisy model P(w|c). Need to verify.
+
     """The probability of an edit; can be '' or 'a|b' or 'a|b+c|d'."""
+
     if edit == '':
         return 1. - spell_error
 

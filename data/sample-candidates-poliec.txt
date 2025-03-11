@@ -1,0 +1,12 @@
+dict_items([
+    ('olitec', '<p|<+i|it'),
+    ('olie', '<p|<+ec|e'),
+    ('olice', '<p|<+ec|ce'),
+    ('olmec', '<p|<+i|m'),
+    ('oleic', '<p|<+ie...p|s+li|l'),
+    ('solie', 'p|s+ec|e'),
+    ('soliel', 'p|s+c|l'),
+    ('soltec', 'p|s+i|t'),
+    ('toliet', 'p|t+c|t'),
+    ('toltec', 'p|t+i|t')
+])
