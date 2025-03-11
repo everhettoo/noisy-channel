@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from channel_v1 import datafile, ChannelV1
+from src.channel_v1 import datafile, ChannelV1
 
-from proba_distributor import ProbaDistributor
+from src.proba_distributor import ProbaDistributor
 
 
 def display_candidate_trace(trace):

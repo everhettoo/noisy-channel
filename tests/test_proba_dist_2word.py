@@ -1,6 +1,6 @@
 from unittest import TestCase
-import channel_v1
-from proba_distributor import ProbaDistributor
+from src import channel_v1
+from src.proba_distributor import ProbaDistributor
 
 
 class PDistWord2TestCase(TestCase):

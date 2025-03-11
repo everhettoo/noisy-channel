@@ -1,6 +1,6 @@
 from unittest import TestCase
-from proba_distributor import ProbaDistributor
-import channel_v1
+from src.proba_distributor import ProbaDistributor
+from src import channel_v1
 
 
 class TestPEdit(TestCase):
