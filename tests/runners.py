@@ -3,6 +3,7 @@ from unittest import TestSuite, TextTestRunner
 from test_proba_dist_1edit import PDist1EditTestCase
 from tests.test_proba_dist_1word import PDistWord1TestCase
 from tests.test_proba_dist_2word import PDistWord2TestCase
+from test_channel_v1 import TestChannelV1
 from test_pedit import TestPEdit
 
 
@@ -47,6 +48,13 @@ def test_pedit():
     return suite
 
 
+def test_channel_v1():
+    suite = TestSuite()
+    suite.addTest(TestChannelV1('test_police'))
+    suite.addTest(TestChannelV1('test_orange'))
+    return suite
+
+
 if __name__ == '__main__':
     runner = TextTestRunner()
 
@@ -61,3 +69,6 @@ if __name__ == '__main__':
 
     print('\r\nRunning test for pedit ...\r\n')
     runner.run(test_pedit())
+
+    print('\r\nRunning test for channel V1 ...\r\n')
+    runner.run(test_channel_v1())

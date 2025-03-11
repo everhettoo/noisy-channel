@@ -25,16 +25,17 @@ def pedit(edit, p: ProbaDistributor, spell_error: float):
 
 
 class ChannelV1:
-    def __init__(self):
-        self.pd_lang_model = ProbaDistributor(datafile('../data/count_1w.tsv'))
-        self.pd_error_model = ProbaDistributor(datafile('../data/count_1edit.tsv'))
-        self.spell_error = 1. / 20.
-        self.alphabet = 'abcdefghijklmnopqrstuvwxyz'
+    def __init__(self, lang_model: ProbaDistributor, error_model: ProbaDistributor, spell_error: float, alphabet: str):
+        self.pd_lang_model = lang_model
+        self.pd_error_model = error_model
+        self.spell_error = spell_error
+        self.alphabet = alphabet
 
         # Obtaining prefixes from lang model.
         self.PREFIXES = set(w[:i] for w in self.pd_lang_model for i in range(len(w) + 1))
 
-        self.trace = {}
+        self.candidate_trace = {}
+        self.edit_trace = {}
 
     def calculate_noise(self, edit):
         # TODO: According pg 234, this is the noisy model P(w|c). Need to verify.
@@ -50,7 +51,7 @@ class ChannelV1:
         proba = pedit(edits, self.pd_lang_model, self.spell_error) * self.pd_lang_model(word)
 
         # Adding for tracing.
-        self.trace[word] = proba
+        self.candidate_trace[word] = proba
 
         return proba
 
@@ -72,6 +73,9 @@ class ChannelV1:
 
         # A substitution for Norvig's lambda for tracing.
         c, edit = max(candidates, key=self.calculate_lang_and_error)
+
+        for a in candidates:
+            self.edit_trace[a[0]] = a[1]
 
         return c
 
