@@ -1,6 +1,5 @@
 from unittest import TestCase
-
-import utility as util
+import channel_v1
 from proba_distributor import ProbaDistributor
 
 
@@ -11,7 +10,7 @@ class PDistWord2TestCase(TestCase):
         cls.denominator = 225955251755.0
 
         # Defining the probability P(w) for a 2 words in corpus based on its occurrence.
-        cls.p = ProbaDistributor(util.datafile('../data/count_2w.tsv'))
+        cls.p = ProbaDistributor(channel_v1.datafile('../data/count_2w.tsv'))
         print(f'[Setup]Total words in corpus: {cls.p.denominator:,}.\r\n')
 
     def test_double_word1(self):

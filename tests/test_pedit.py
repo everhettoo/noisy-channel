@@ -3,7 +3,7 @@ from proba_distributor import ProbaDistributor
 import channel_v1
 
 
-class Test(TestCase):
+class TestPEdit(TestCase):
     @classmethod
     def setUpClass(cls):
         # 1 edit vocab size

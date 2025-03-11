@@ -26,7 +26,7 @@ def pedit(edit, p: ProbaDistributor, spell_error: float):
     return spell_error * product(p(e) for e in edit.split('+'))
 
 
-class EditDistance:
+class ChannelV1:
     def __init__(self):
         self.pd_lang_model = ProbaDistributor(datafile('../data/count_1w.tsv'))
         self.pd_error_model = ProbaDistributor(datafile('../data/count_1edit.tsv'))
@@ -38,25 +38,17 @@ class EditDistance:
 
         self.trace = {}
 
-    # def pedit(self, edit):
-    #     # TODO: According pg 234, this is the noisy model P(w|c). Need to verify.
-    #     """The probability of an edit; can be '' or 'a|b' or 'a|b+c|d'."""
-    #     if edit == '':
-    #         return 1. - self.spell_error
-    #
-    #     return self.spell_error * product(self.pd_error_model(e) for e in edit.split('+'))
-
-    def calculate_error_edit(self, edit):
+    def calculate_noise(self, edit):
         return pedit(edit, self.pd_error_model, self.spell_error)
 
-    def calculate_proba(self, p):
+    def calculate_lang_and_error(self, p):
         """Calculate the probability of P(w|c)P(c)."""
 
         word = p[0]  # estimated correct c for misspelled w.
         edits = p[1]  # noise edits for estimated word c.
 
         # Calculates P(w|c)P(c) --> error model x lang model.
-        proba = self.pedit(edits) * self.pd_lang_model(word)
+        proba = pedit(edits, self.pd_lang_model, self.spell_error) * self.pd_lang_model(word)
 
         # Adding for tracing.
         self.trace[word] = proba
@@ -80,7 +72,7 @@ class EditDistance:
         #               )(*p))
 
         # A substitution for Norvig's lambda for tracing.
-        c, edit = max(candidates, key=self.calculate_proba)
+        c, edit = max(candidates, key=self.calculate_lang_and_error)
 
         # Reads the max-args produced by calculate_proba.
         max_proba = max(self.trace.values())
@@ -110,7 +102,7 @@ class EditDistance:
                 if C not in results:
                     results[C] = e
                 else:
-                    results[C] = max(results[C], e, key=self.calculate_error_edit)
+                    results[C] = max(results[C], e, key=self.calculate_noise)
             if d <= 0: return
             extensions = [hd + c for c in self.alphabet if hd + c in self.PREFIXES]
             p = (hd[-1] if hd else '<')  ## previous character

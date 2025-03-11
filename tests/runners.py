@@ -2,6 +2,7 @@ from unittest import TestSuite, TextTestRunner
 
 from tests.test_proba_dist_1word import PDistWord1TestCase
 from tests.test_proba_dist_2word import PDistWord2TestCase
+from test_pedit import TestPEdit
 
 
 def test_suite_pdist_word1():
@@ -25,6 +26,13 @@ def test_suite_pdist_word2():
     suite.addTest(PDistWord2TestCase('test_relative_proba_for_unknown'))
     return suite
 
+def test_pedit():
+    suite = TestSuite()
+    suite.addTest(TestPEdit('test_product'))
+    suite.addTest(TestPEdit('test_pedit_unknown'))
+    suite.addTest(TestPEdit('test_pedit_edit1'))
+    return suite
+
 
 if __name__ == '__main__':
     runner = TextTestRunner()
@@ -33,3 +41,6 @@ if __name__ == '__main__':
 
     print('\r\nRunning test for word 2 ...\r\n')
     runner.run(test_suite_pdist_word2())
+
+    print('\r\nRunning test for pedit ...\r\n')
+    runner.run(test_pedit())
