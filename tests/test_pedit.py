@@ -1,6 +1,6 @@
 from unittest import TestCase
-import utility
 from proba_distributor import ProbaDistributor
+import channel_v1
 
 
 class Test(TestCase):
@@ -12,12 +12,12 @@ class Test(TestCase):
         cls.spell_error = 1. / 20.
 
         # Defining the probability P(w) for a 2 words in corpus based on its occurrence.
-        cls.p = ProbaDistributor(utility.datafile('../data/count_1edit.tsv'))
+        cls.p = ProbaDistributor(channel_v1.datafile('../data/count_1edit.tsv'))
         print(f'[Setup]Total words in corpus: {cls.p.denominator:,}.\r\n')
 
     def test_product(self):
         nums = [1, 2, 3]
-        prod = utility.product(nums)
+        prod = channel_v1.product(nums)
         print(f'Product of {nums} = {prod:,}')
         self.assertEqual(1 * 2 * 3, prod)
 
@@ -30,7 +30,7 @@ class Test(TestCase):
         manual_prod = self.spell_error * p_w
         print(f'Manual: {self.spell_error} x {p_w} = {manual_prod:.8f}')
 
-        pedit_prod = utility.pedit(w, self.p, self.spell_error)
+        pedit_prod = channel_v1.pedit(w, self.p, self.spell_error)
         print(f'Pedit : {self.spell_error} x {p_w} = {pedit_prod:.8f}')
 
         condition = manual_prod == pedit_prod
@@ -41,6 +41,6 @@ class Test(TestCase):
         # The word found in corpus => 133 / 39,073 x 0.05 (spelling error) = 0.00017019425178512016
         w = 'i|is'
         w_cnt = self.p[w]
-        proba = utility.pedit(w, self.p, self.spell_error)
+        proba = channel_v1.pedit(w, self.p, self.spell_error)
         print(f'P({w}) = {self.p[w]:,} / {self.p.denominator:,} = {proba}.\r\n')
         self.assertEqual(w_cnt / self.p.denominator * self.spell_error, proba)

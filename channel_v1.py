@@ -17,6 +17,15 @@ def product(nums):
     return reduce(operator.mul, nums, 1)
 
 
+def pedit(edit, p: ProbaDistributor, spell_error: float):
+    # TODO: According pg 234, this is the noisy model P(w|c). Need to verify.
+    """The probability of an edit; can be '' or 'a|b' or 'a|b+c|d'."""
+    if edit == '':
+        return 1. - spell_error
+
+    return spell_error * product(p(e) for e in edit.split('+'))
+
+
 class EditDistance:
     def __init__(self):
         self.pd_lang_model = ProbaDistributor(datafile('../data/count_1w.tsv'))
@@ -29,16 +38,16 @@ class EditDistance:
 
         self.trace = {}
 
-    def pedit(self, edit, p: ProbaDistributor = None):
-        # TODO: According pg 234, this is the noisy model P(w|c). Need to verify.
-        """The probability of an edit; can be '' or 'a|b' or 'a|b+c|d'."""
-        if edit == '':
-            return 1. - self.spell_error
+    # def pedit(self, edit):
+    #     # TODO: According pg 234, this is the noisy model P(w|c). Need to verify.
+    #     """The probability of an edit; can be '' or 'a|b' or 'a|b+c|d'."""
+    #     if edit == '':
+    #         return 1. - self.spell_error
+    #
+    #     return self.spell_error * product(self.pd_error_model(e) for e in edit.split('+'))
 
-        if p:
-            return self.spell_error * product(p(e) for e in edit.split('+'))
-        else:
-            return self.spell_error * product(self.pd_error_model(e) for e in edit.split('+'))
+    def calculate_error_edit(self, edit):
+        return pedit(edit, self.pd_error_model, self.spell_error)
 
     def calculate_proba(self, p):
         """Calculate the probability of P(w|c)P(c)."""
@@ -101,7 +110,7 @@ class EditDistance:
                 if C not in results:
                     results[C] = e
                 else:
-                    results[C] = max(results[C], e, key=self.pedit)
+                    results[C] = max(results[C], e, key=self.calculate_error_edit)
             if d <= 0: return
             extensions = [hd + c for c in self.alphabet if hd + c in self.PREFIXES]
             p = (hd[-1] if hd else '<')  ## previous character
