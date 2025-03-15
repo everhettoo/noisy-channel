@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from src.channel_v1 import datafile, ChannelV1
+from channel_v1 import datafile, ChannelV1
 
-from src.proba_distributor import ProbaDistributor
+from proba_distributor import ProbaDistributor
 
 
 def display_candidate_trace(trace):
@@ -29,7 +29,7 @@ def display_edit_trace(trace, candidate):
 class TestChannelV1(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.trace = False
+        cls.trace = True
 
         # Defining the probability P(w) for a 2 words in corpus based on its occurrence.
         cls.p_lang_model = ProbaDistributor(datafile('../data/count_1w.tsv'))

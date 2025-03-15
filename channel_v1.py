@@ -1,7 +1,7 @@
 import operator
 from functools import reduce
 
-from src.proba_distributor import ProbaDistributor
+from proba_distributor import ProbaDistributor
 
 
 def datafile(name, sep='\t'):
