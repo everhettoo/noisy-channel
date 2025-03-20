@@ -33,7 +33,7 @@ class TestChannelV1(TestCase):
         cls.trace = True
 
         # Defining the probability P(w) for a 2 words in corpus based on its occurrence.
-        cls.p_lang_model = ProbaDistributor(datafile('../data/count_1w.tsv'))
+        cls.p_lang_model = ProbaDistributor(datafile('../data/medical_freq.tsv'))
         cls.p_error_model = ProbaDistributor(datafile('../data/count_1edit.tsv'))
         cls.channel = ChannelV1(lang_model=cls.p_lang_model,
                                 error_model=cls.p_error_model,
@@ -49,7 +49,7 @@ class TestChannelV1(TestCase):
         # TODO: Need manual verification for argmax-c (Pc|w) = argmax-c P(w|c) x P(c).
 
         # w = 'poliec'
-        w = 'poliec'
+        w = 'diabetic'
         expected = 'police'
         c = self.channel.correct(w)
         print(f'Candidate: {c}')
